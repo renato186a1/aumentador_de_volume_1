@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aumentador de Volume Livre</string>
+    <string name="stop_service">Parar Amplificador</string>
+    <string name="vol_label">Vol.: 100%</string>
+    <string name="boost_label">Boost: 0%</string>
+    <string name="non_uniform">Boost Suave (Proteger Grave/Voz)</string>
+    <string name="auto_boot">Iniciar junto com o Android</string>
+    <string name="max_limit_label">Limite Máximo Permitido:</string>
+    <string name="warning_text">Atenção: Boosts elevados podem causar distorção ou danificar alto-falantes. Sem anúncios e 100% offline.</string>
+</resources>

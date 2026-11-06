@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:minWidth="310dp"
+    android:background="#202124">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_name"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:text="Desligar"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D32F2F" />
+    </LinearLayout>
+
+    <!-- Barra de Volume do Sistema -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tv_vol"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:text="Vol.: 100%"
+            android:textColor="#E8EAED"
+            android:textSize="14sp" />
+
+        <SeekBar
+            android:id="@+id/sb_vol"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="100" />
+    </LinearLayout>
+
+    <!-- Barra de Boost (LoudnessEnhancer) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tv_boost"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:text="Boost: 0%"
+            android:textColor="#FFB74D"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
+        <SeekBar
+            android:id="@+id/sb_boost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="100" />
+    </LinearLayout>
+
+    <!-- Opcoes Extras Direto na Tela (Sem precisar de outra Activity) -->
+    <CheckBox
+        android:id="@+id/cb_shape"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/non_uniform"
+        android:textColor="#BDC1C6"
+        android:textSize="13sp"
+        android:checked="true" />
+
+    <CheckBox
+        android:id="@+id/cb_boot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/auto_boot"
+        android:textColor="#BDC1C6"
+        android:textSize="13sp"
+        android:checked="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/max_limit_label"
+            android:textColor="#BDC1C6"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btn_limit"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Máx: 60%"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/warning_text"
+        android:textColor="#9AA0A6"
+        android:textSize="11sp"
+        android:gravity="center" />
+
+</LinearLayout>
