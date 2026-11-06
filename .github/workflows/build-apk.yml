@@ -1,0 +1,85 @@
+name: Compilar APK Direto (SDK CLI)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Compilar APK com Ferramentas Nativas do Android SDK
+        run: |
+           BUILD_TOOLS="$ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools | sort -V | tail -n 1)"
+          PLATFORM="$ANDROID_HOME/platforms/$(ls $ANDROID_HOME/platforms | sort -V | tail -n 1)/android.jar"
+          
+          echo "Usando Build-Tools: $BUILD_TOOLS"
+          echo "Usando Plataforma: $PLATFORM"
+          
+          mkdir -p build/compiled_res build/gen build/classes build/dex dist
+          
+          # 1. Compilar recursos com aapt2
+          "$BUILD_TOOLS/aapt2" compile --dir res -o build/compiled_res/resources.zip
+          
+          # 2. Linkar recursos e gerar R.java + APK base
+          "$BUILD_TOOLS/aapt2" link \
+            -o build/unsigned.unaligned.apk \
+            -I "$PLATFORM" \
+            --manifest AndroidManifest.xml \
+            --java build/gen \
+            build/compiled_res/resources.zip
+            
+          # 3. Compilar codigo Java (incluindo R.java) com javac
+          javac -source 1.8 -target 1.8 \
+            -bootclasspath "$PLATFORM" \
+            -classpath "$PLATFORM" \
+            -d build/classes \
+            $(find src build/gen -name "*.java")
+            
+          # 4. Converter .class para classes.dex com d8
+          "$BUILD_TOOLS/d8" --lib "$PLATFORM" \
+            --output build/dex \
+            $(find build/classes -name "*.class")
+            
+          # 5. Adicionar classes.dex na raiz do APK
+          cp build/dex/classes.dex .
+          zip -uj build/unsigned.unaligned.apk classes.dex
+          rm classes.dex
+          
+          # 6. Alinhar o APK com zipalign
+          "$BUILD_TOOLS/zipalign" -p -f -v 4 \
+            build/unsigned.unaligned.apk \
+            build/unsigned.aligned.apk
+            
+          # 7. Gerar Keystore e Assinar APK (v1 + v2 + v3) com apksigner
+          keytool -genkeypair -v \
+            -keystore build/release.keystore \
+            -alias booster_key \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass 123456 -keypass 123456 \
+            -dname "CN=OpenSource, OU=Dev, O=FreeApp, L=Aracaju, ST=SE, C=BR"
+            
+          "$BUILD_TOOLS/apksigner" sign \
+            --ks build/release.keystore \
+            --ks-key-alias booster_key \
+            --ks-pass pass:123456 \
+            --key-pass pass:123456 \
+            --out dist/Aumentador_Volume_Livre_v1.0.apk \
+            build/unsigned.aligned.apk
+
+      - name: Publicar APK Compilado nos Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aumentador-Volume-Livre-APK
+          path: dist/Aumentador_Volume_Livre_v1.0.apk
